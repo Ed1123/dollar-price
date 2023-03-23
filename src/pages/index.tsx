@@ -1,5 +1,25 @@
+import { InferGetServerSidePropsType } from "next";
+
+const PRICES: DollarData[] = [
+  { exchange_name: "test1", url: "test1.com", sell_price: 3.8, buy_price: 3.9 },
+  {
+    exchange_name: "test2",
+    url: "test2.com",
+    sell_price: 3.75,
+    buy_price: 3.8,
+  },
+];
+export async function getServerSideProps() {
+  // Fetch data from external API
+  const res = await fetch(`https://9vc25p.deta.dev/rates`);
+  const data = await res.json();
+
+  // Pass data to the page via props
+  return { props: { data } };
+}
+
 type DollarData = {
-  name: string;
+  exchange_name: string;
   url: string;
   sell_price: number;
   buy_price: number;
@@ -23,19 +43,18 @@ function PricesList({ prices }: { prices: Price[] }) {
   );
 }
 
-export default function HomePage() {
-  const prices: DollarData[] = [
-    { name: "test1", url: "test1.com", sell_price: 3.8, buy_price: 3.9 },
-    { name: "test2", url: "test2.com", sell_price: 3.75, buy_price: 3.8 },
-  ];
+export default function HomePage({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const prices: DollarData[] = data;
   const buy_prices: Price[] = prices.map((price) => ({
-    name: price.name,
+    name: price.exchange_name,
     url: price.url,
     price: price.buy_price,
   }));
   buy_prices.sort((a, b) => -a.price + b.price);
   const sell_prices: Price[] = prices.map((price) => ({
-    name: price.name,
+    name: price.exchange_name,
     url: price.url,
     price: price.sell_price,
   }));
