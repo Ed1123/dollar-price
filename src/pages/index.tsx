@@ -1,5 +1,14 @@
 import { InferGetServerSidePropsType } from 'next';
 
+type DollarData = {
+  exchange_name: string;
+  url: string;
+  sell_price: number;
+  buy_price: number;
+};
+
+type Price = { name: string; url: string; price: number };
+
 const PRICES: DollarData[] = [
   { exchange_name: 'test1', url: 'test1.com', sell_price: 3.8, buy_price: 3.9 },
   {
@@ -9,6 +18,7 @@ const PRICES: DollarData[] = [
     buy_price: 3.8,
   },
 ];
+
 export async function getServerSideProps() {
   // Fetch data from external API
   const res = await fetch(`https://9vc25p.deta.dev/rates`);
@@ -18,22 +28,20 @@ export async function getServerSideProps() {
   return { props: { data } };
 }
 
-type DollarData = {
-  exchange_name: string;
-  url: string;
-  sell_price: number;
-  buy_price: number;
-};
-
 function Header({ title }: { title?: string }) {
   return <h1>{title ? title : 'Default title'} </h1>;
 }
 
-type Price = { name: string; url: string; price: number };
-function PricesList({ prices }: { prices: Price[] }) {
+function PricesList({
+  prices,
+  showAll,
+}: {
+  prices: Price[];
+  showAll: boolean;
+}) {
   return (
     <ul>
-      {prices.map((price) => (
+      {(showAll ? prices : prices.slice(0, 3)).map((price) => (
         <li key={price.url}>
           <a href={price.url} target="_blank" rel="noopener noreferrer">
             {price.name}
@@ -67,10 +75,10 @@ export default function HomePage({
       <Header title={'Online dollar prices in Peru'} />
 
       <h2>Best places to sell</h2>
-      <PricesList prices={buy_prices} />
+      <PricesList prices={buy_prices} showAll={false} />
 
       <h2>Best places to buy</h2>
-      <PricesList prices={sell_prices} />
+      <PricesList prices={sell_prices} showAll={true} />
     </div>
   );
 }
