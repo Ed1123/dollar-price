@@ -53,32 +53,36 @@ function PricesList({
   );
 }
 
-export default function HomePage({
-  data,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const prices: DollarData[] = data;
-  const buy_prices: Price[] = prices.map((price) => ({
+function getBuySellPrices(prices: DollarData[]) {
+  const buyPrices: Price[] = prices.map((price) => ({
     name: price.exchange_name,
     url: price.url,
     price: price.buy_price,
   }));
-  buy_prices.sort((a, b) => -a.price + b.price);
-  const sell_prices: Price[] = prices.map((price) => ({
+  buyPrices.sort((a, b) => -a.price + b.price);
+  const sellPrices: Price[] = prices.map((price) => ({
     name: price.exchange_name,
     url: price.url,
     price: price.sell_price,
   }));
-  sell_prices.sort((a, b) => a.price - b.price);
+  sellPrices.sort((a, b) => a.price - b.price);
+  return { buyPrices, sellPrices };
+}
+
+export default function HomePage({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { buyPrices, sellPrices } = getBuySellPrices(data);
 
   return (
     <div>
       <Header title={'Online dollar prices in Peru'} />
 
       <h2>Best places to sell</h2>
-      <PricesList prices={buy_prices} showAll={false} />
+      <PricesList prices={buyPrices} showAll={false} />
 
       <h2>Best places to buy</h2>
-      <PricesList prices={sell_prices} showAll={true} />
+      <PricesList prices={sellPrices} showAll={true} />
     </div>
   );
 }
