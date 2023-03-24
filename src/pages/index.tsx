@@ -1,4 +1,5 @@
 import { InferGetServerSidePropsType } from 'next';
+import Head from 'next/head';
 import { useState } from 'react';
 
 type DollarData = {
@@ -78,6 +79,9 @@ export default function HomePage({
 
   return (
     <div>
+      <Head>
+        <title>Dollar</title>
+      </Head>
       <Header title={'Online dollar prices in Peru'} />
       <h2>Best places to sell</h2>
       <PricesList prices={buyPrices} />
