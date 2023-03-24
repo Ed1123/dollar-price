@@ -1,4 +1,4 @@
-import { InferGetServerSidePropsType } from 'next';
+import type { InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 
@@ -23,8 +23,8 @@ type Price = { name: string; url: string; price: number };
 
 export async function getServerSideProps() {
   // Fetch data from external API
-  const res = await fetch(`https://9vc25p.deta.dev/rates`);
-  const data = await res.json();
+  const res: Response = await fetch(`https://9vc25p.deta.dev/rates`);
+  const data = (await res.json()) as DollarData[];
 
   // Pass data to the page via props
   return { props: { data } };
