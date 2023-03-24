@@ -1,4 +1,5 @@
 import { InferGetServerSidePropsType } from 'next';
+import { useState } from 'react';
 
 type DollarData = {
   exchange_name: string;
@@ -32,24 +33,25 @@ function Header({ title }: { title?: string }) {
   return <h1>{title ? title : 'Default title'} </h1>;
 }
 
-function PricesList({
-  prices,
-  showAll,
-}: {
-  prices: Price[];
-  showAll: boolean;
-}) {
+function PricesList({ prices }: { prices: Price[] }) {
+  const [showAll, setShowAll] = useState(false);
+
   return (
-    <ul>
-      {(showAll ? prices : prices.slice(0, 3)).map((price) => (
-        <li key={price.url}>
-          <a href={price.url} target="_blank" rel="noopener noreferrer">
-            {price.name}
-          </a>
-          at {price.price}
-        </li>
-      ))}
-    </ul>
+    <div>
+      <ul>
+        {(showAll ? prices : prices.slice(0, 3)).map((price) => (
+          <li key={price.url}>
+            <a href={price.url} target="_blank" rel="noopener noreferrer">
+              {price.name}
+            </a>
+            at {price.price}
+          </li>
+        ))}
+      </ul>
+      <button onClick={() => setShowAll(!showAll)}>
+        Show {showAll ? 'less' : 'more'}
+      </button>
+    </div>
   );
 }
 
@@ -77,12 +79,11 @@ export default function HomePage({
   return (
     <div>
       <Header title={'Online dollar prices in Peru'} />
-
       <h2>Best places to sell</h2>
-      <PricesList prices={buyPrices} showAll={false} />
+      <PricesList prices={buyPrices} />
 
       <h2>Best places to buy</h2>
-      <PricesList prices={sellPrices} showAll={true} />
+      <PricesList prices={sellPrices} />
     </div>
   );
 }
