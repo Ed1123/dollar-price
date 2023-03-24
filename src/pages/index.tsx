@@ -11,15 +11,15 @@ type DollarData = {
 
 type Price = { name: string; url: string; price: number };
 
-const PRICES: DollarData[] = [
-  { exchange_name: 'test1', url: 'test1.com', sell_price: 3.8, buy_price: 3.9 },
-  {
-    exchange_name: 'test2',
-    url: 'test2.com',
-    sell_price: 3.75,
-    buy_price: 3.8,
-  },
-];
+// const PRICES: DollarData[] = [
+//   { exchange_name: 'test1', url: 'test1.com', sell_price: 3.8, buy_price: 3.9 },
+//   {
+//     exchange_name: 'test2',
+//     url: 'test2.com',
+//     sell_price: 3.75,
+//     buy_price: 3.8,
+//   },
+// ];
 
 export async function getServerSideProps() {
   // Fetch data from external API
