@@ -23,7 +23,7 @@ type Price = { name: string; url: string; price: number };
 
 export async function getServerSideProps() {
   // Fetch data from external API
-  const res: Response = await fetch(`https://9vc25p.deta.dev/rates`);
+  const res: Response = await fetch(`https://dollarapi-1-w9592058.deta.app`);
   const data = (await res.json()) as DollarData[];
 
   // Pass data to the page via props
