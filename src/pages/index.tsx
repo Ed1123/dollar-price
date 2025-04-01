@@ -24,7 +24,7 @@ type Price = { name: string; url: string; price: number };
 export async function getServerSideProps() {
   // Fetch data from external API
   const res: Response = await fetch(
-    `https://dollarapi-1-w9592058.deta.app/rates`
+    `https://dollar-sol-api-812540214021.us-central1.run.app/rates`
   );
   const data = (await res.json()) as DollarData[];
 
